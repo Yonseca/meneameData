@@ -14,166 +14,162 @@ import org.apache.commons.lang3.math.NumberUtils;
  *
  * @author yonsecaS
  */
-public class Meneo implements Comparable<Meneo>{
-    
-    private int id; 
-    private String author; 
-    private String body;
-    private int comments; 
-    private int karma; 
-    private long published;
-    private long sent; 
-    private String story; 
-    private String sub; 
-    private String tags; 
-    private String title; 
-    private String url;
-    private LinkedHashMap<String, Integer> votes; 
-    
-    public Meneo (Map<String, Object> node){
-        this.id = (int) node.get("id");
-        this.author = (String) node.get("author");
-        this.body = (String) node.get("body");
-        this.comments = (int) node.get("comments");
-        this.karma = (int) node.get("karma");
-        this.published = NumberUtils.toLong(node.get("published").toString());
-        this.sent = NumberUtils.toLong(node.get("sent").toString());
-        this.story = (String) node.get("story");
-        this.sub = (String) node.get("sub");
-        this.tags = (String) node.get("tags");
-        this.title = (String) node.get("title");
-        this.url = (String) node.get("url");
-        this.votes = (LinkedHashMap<String, Integer>) node.get("votes");
-    }
+public class Meneo implements Comparable<Meneo> {
 
-    public Meneo(int id, String author, String body, int comments, int karma, long published, long sent, String story, String sub, String tags, String title, String url, LinkedHashMap<String, Integer> votes) {
-        this.id = id;
-        this.author = author;
-        this.body = body;
-        this.comments = comments;
-        this.karma = karma;
-        this.published = published;
-        this.sent = sent;
-        this.story = story;
-        this.sub = sub;
-        this.tags = tags;
-        this.title = title;
-        this.url = url;
-        this.votes = votes;
-    }
+	private int id;
+	private String author;
+	private String body;
+	private int comments;
+	private int karma;
+	private long published;
+	private long sent;
+	private String story;
+	private String sub;
+	private String tags;
+	private String title;
+	private String url;
+	private LinkedHashMap<String, Integer> votes;
 
-    public int getId() {
-        return id;
-    }
+	public Meneo(Map<String, Object> node) {
+		this.id = (int) node.get("id");
+		this.author = (String) node.get("author");
+		this.body = (String) node.get("body");
+		this.comments = (int) node.get("comments");
+		this.karma = (int) node.get("karma");
+		this.published = NumberUtils.toLong(node.get("published").toString());
+		this.sent = NumberUtils.toLong(node.get("sent").toString());
+		this.story = (String) node.get("story");
+		this.sub = (String) node.get("sub");
+		this.tags = (String) node.get("tags");
+		this.title = (String) node.get("title");
+		this.url = (String) node.get("url");
+		this.votes = (LinkedHashMap<String, Integer>) node.get("votes");
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public Meneo(int id, String author, String body, int comments, int karma, long published, long sent, String story,
+			String sub, String tags, String title, String url, LinkedHashMap<String, Integer> votes) {
+		this.id = id;
+		this.author = author;
+		this.body = body;
+		this.comments = comments;
+		this.karma = karma;
+		this.published = published;
+		this.sent = sent;
+		this.story = story;
+		this.sub = sub;
+		this.tags = tags;
+		this.title = title;
+		this.url = url;
+		this.votes = votes;
+	}
 
-    public String getAuthor() {
-        return author;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public String getBody() {
-        return body;
-    }
+	public String getAuthor() {
+		return author;
+	}
 
-    public void setBody(String body) {
-        this.body = body;
-    }
+	public void setAuthor(String author) {
+		this.author = author;
+	}
 
-    public int getComments() {
-        return comments;
-    }
+	public String getBody() {
+		return body;
+	}
 
-    public void setComments(int comments) {
-        this.comments = comments;
-    }
+	public void setBody(String body) {
+		this.body = body;
+	}
 
-    public int getKarma() {
-        return karma;
-    }
+	public int getComments() {
+		return comments;
+	}
 
-    public void setKarma(int karma) {
-        this.karma = karma;
-    }
+	public void setComments(int comments) {
+		this.comments = comments;
+	}
 
-    public long getPublished() {
-        return published;
-    }
+	public int getKarma() {
+		return karma;
+	}
 
-    public void setPublished(long published) {
-        this.published = published;
-    }
+	public void setKarma(int karma) {
+		this.karma = karma;
+	}
 
-    public long getSent() {
-        return sent;
-    }
+	public long getPublished() {
+		return published;
+	}
 
-    public void setSent(long sent) {
-        this.sent = sent;
-    }
+	public void setPublished(long published) {
+		this.published = published;
+	}
 
-    public String getStory() {
-        return story;
-    }
+	public long getSent() {
+		return sent;
+	}
 
-    public void setStory(String story) {
-        this.story = story;
-    }
+	public void setSent(long sent) {
+		this.sent = sent;
+	}
 
-    public String getSub() {
-        return sub;
-    }
+	public String getStory() {
+		return story;
+	}
 
-    public void setSub(String sub) {
-        this.sub = sub;
-    }
+	public void setStory(String story) {
+		this.story = story;
+	}
 
-    public String getTags() {
-        return tags;
-    }
+	public String getSub() {
+		return sub;
+	}
 
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
+	public void setSub(String sub) {
+		this.sub = sub;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getTags() {
+		return tags;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public LinkedHashMap<String, Integer> getVotes() {
-        return votes;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public void setVotes(LinkedHashMap<String, Integer> votes) {
-        this.votes = votes;
-    }
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public LinkedHashMap<String, Integer> getVotes() {
+		return votes;
+	}
+
+	public void setVotes(LinkedHashMap<String, Integer> votes) {
+		this.votes = votes;
+	}
 
 	@Override
 	public int compareTo(Meneo o) {
-		return id - o.getId(); 
+		return id - o.getId();
 	}
 
-    
-    
-
-    
-    
 }

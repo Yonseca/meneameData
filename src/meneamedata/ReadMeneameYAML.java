@@ -22,41 +22,41 @@ import meneamedata.db.PostgreDButils;
  * @author yonseca
  */
 public class ReadMeneameYAML {
-    
-	
-    public static void main(String[] args) {
-        
-    	TreeSet<Meneo> meneos = new TreeSet<Meneo>();  
-        readYaml(meneos);
-        PostgreDButils db = new PostgreDButils(); 	
-        try {
+
+	public static void main(String[] args) {
+
+		TreeSet<Meneo> meneos = new TreeSet<Meneo>();
+		readYaml(meneos);
+		PostgreDButils db = new PostgreDButils();
+		try {
 			db.insertData(meneos);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-        
-    }
+
+	}
 
 	/**
 	 * Read YAML file
-	 * @param meneos - A TreeSet including all Meneos
+	 * 
+	 * @param meneos
+	 *            - A TreeSet including all Meneos
 	 */
 	private static void readYaml(TreeSet<Meneo> meneos) {
 		try {
-        	Yaml yaml = new Yaml(); 
-        	File datos = new File("data/meneame.yml"); 
-        	StringReader reader = new StringReader(FileUtils.readFileToString(datos, "UTF-8"));
-        	Iterable<Object> iter = yaml.loadAll(reader); 
-        	for (Object node : iter) {
-        		if (node != null) {
-    				Map<String, Object> m = (Map<String, Object>) node; 
-    				Meneo meneo = new Meneo(m); 
-    				meneos.add(meneo); 
+			Yaml yaml = new Yaml();
+			File datos = new File("data/meneame.yml");
+			StringReader reader = new StringReader(FileUtils.readFileToString(datos, "UTF-8"));
+			Iterable<Object> iter = yaml.loadAll(reader);
+			for (Object node : iter) {
+				if (node != null) {
+					Map<String, Object> m = (Map<String, Object>) node;
+					Meneo meneo = new Meneo(m);
+					meneos.add(meneo);
 				}
 			}
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
