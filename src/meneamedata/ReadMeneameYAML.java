@@ -42,7 +42,7 @@ public class ReadMeneameYAML {
 	 * @param meneos
 	 *            - A TreeSet including all Meneos
 	 */
-	private static void readYaml(TreeSet<Meneo> meneos) {
+	protected static void readYaml(TreeSet<Meneo> meneos) {
 		try {
 			Yaml yaml = new Yaml();
 			File datos = new File("data/meneame.yml");

@@ -69,6 +69,7 @@ public class PostgreDButils {
 	public int[] insertData(Set<Meneo> listaMeneos) throws SQLException {
 
 		int[] resul = new int[0];
+		boolean autoCommit = connection.getAutoCommit();
 		try {
 			if (connection == null || connection.isClosed()) {
 				connect();
@@ -111,6 +112,7 @@ public class PostgreDButils {
 				System.out.println(e1.getMessage());
 			}
 		} finally {
+			connection.setAutoCommit(autoCommit);
 			close();
 		}
 
