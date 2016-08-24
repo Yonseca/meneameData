@@ -24,16 +24,17 @@ import meneamedata.db.PostgreDButils;
 public class ReadMeneameYAML {
 
 	public static void main(String[] args) {
-
+		long t_start = System.currentTimeMillis(); 
 		TreeSet<Meneo> meneos = new TreeSet<Meneo>();
 		readYaml(meneos);
 		PostgreDButils db = new PostgreDButils();
 		try {
-			db.insertData(meneos);
+			db.upsertMeneos(meneos);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-
+		long t_end = System.currentTimeMillis(); 
+		System.out.printf("Total: %d ms.", t_end-t_start);
 	}
 
 	/**

@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.postgresql.jdbc.PgConnection;
 import org.postgresql.util.HostSpec;
 
@@ -23,8 +24,11 @@ import org.postgresql.util.HostSpec;
  */
 public class PostgreDButils {
 
+	private static final int BATCH_MAX = 5000;
 	private Connection connection;
 	private PreparedStatement insert;
+	private PreparedStatement upsert;
+
 
 	/**
 	 * Turns up a database connection
@@ -38,7 +42,9 @@ public class PostgreDButils {
 			Properties prop = new Properties();
 			prop.setProperty("password", Tokens.PASSWORD);
 			connection = new PgConnection(hostSpec, Tokens.USERNAME, Tokens.DATABASE, prop, "");
-			insert = connection.prepareStatement(Tokens.INSERT_MENEO);
+			insert = connection.prepareStatement(PostgreQueries.INSERT_MENEO);
+			upsert = connection.prepareStatement(PostgreQueries.UPSERT_MENEO);
+
 		} catch (SQLException ex) {
 			Logger.getLogger(PostgreDButils.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (Exception e) {
@@ -117,6 +123,88 @@ public class PostgreDButils {
 		}
 
 		return resul;
+	}
+	
+	/**
+	 * 
+	 * @param listaMeneos
+	 * @return
+	 * @throws SQLException
+	 */
+	public int[] upsertMeneos(Set<Meneo> listaMeneos) throws SQLException {
+		int[] resul = new int[0];
+		boolean autoCommit = false; 
+		int batches = 0; 
+		try {
+			if (connection == null || connection.isClosed()) {
+				connect();
+			}
+			autoCommit = connection.getAutoCommit();
+			connection.setAutoCommit(false);
+			for (Meneo meneo : listaMeneos) {
+				Timestamp datePublished = new Timestamp(meneo.getPublished() * 1000);
+				Timestamp dateSent = new Timestamp(meneo.getSent() * 1000);
+				Integer votesAnonymous = meneo.getVotes().get("anonymous");
+				Integer votesNegative = meneo.getVotes().get("negative");
+				Integer votesUsers = meneo.getVotes().get("users");
+				int column = 1; 
+				//insert into
+				upsert.setInt(column, meneo.getId()); ++column;
+				upsert.setString(column, meneo.getAuthor()); ++column;
+				upsert.setString(column, meneo.getBody()); ++column;
+				upsert.setInt(column, meneo.getComments()); ++column;
+				upsert.setInt(column, meneo.getKarma()); ++column;
+				upsert.setTimestamp(column, datePublished); ++column;
+				upsert.setTimestamp(column, dateSent); ++column;
+				upsert.setString(column, meneo.getStory()); ++column;
+				upsert.setString(column, meneo.getSub()); ++column;
+				upsert.setString(column, meneo.getTags()); ++column; 
+				upsert.setString(column, meneo.getTitle()); ++column;
+				upsert.setString(column, meneo.getUrl()); ++column;
+				upsert.setInt(column, votesAnonymous); ++column;
+				upsert.setInt(column, votesNegative); ++column;
+				upsert.setInt(column, votesUsers); ++column;
+				
+				// update
+				upsert.setString(column, meneo.getAuthor());++column;
+				upsert.setString(column, meneo.getBody());++column;
+				upsert.setInt(column, meneo.getComments());++column;
+				upsert.setInt(column, meneo.getKarma());++column;
+				upsert.setTimestamp(column, datePublished);++column;
+				upsert.setTimestamp(column, dateSent);++column;
+				upsert.setString(column, meneo.getStory());++column;
+				upsert.setString(column, meneo.getSub());++column;
+				upsert.setString(column, meneo.getTags());++column;
+				upsert.setString(column, meneo.getTitle());++column;
+				upsert.setString(column, meneo.getUrl());++column;
+				upsert.setInt(column, votesAnonymous);++column;
+				upsert.setInt(column, votesNegative);++column;
+				upsert.setInt(column, votesUsers); 
+				upsert.addBatch();
+				batches++;
+				if(batches == BATCH_MAX) {
+					resul = ArrayUtils.addAll(resul, upsert.executeBatch()); 
+					batches = 0; 
+				}
+			}
+			System.out.println(PostgreQueries.UPSERT_MENEO);
+			resul = ArrayUtils.addAll(resul, upsert.executeBatch()); 
+			connection.commit();
+		} catch (SQLException e) {
+			System.out.println(e.getNextException());
+			System.out.println("## INSERT FAIL: Doing rollback! ## ");
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				System.out.println("Rollback failed :(");
+				System.out.println(e1.getMessage());
+			}
+		} finally {
+			connection.setAutoCommit(autoCommit);
+			close();
+		}
+		
+		return resul; 
 	}
 
 }
